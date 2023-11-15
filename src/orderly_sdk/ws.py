@@ -11,6 +11,8 @@ import websockets
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from websockets import WebSocketClientProtocol
 
+from .helpers import get_loop
+
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
 )
@@ -27,10 +29,12 @@ class WsTopicManager:
         _id="WS_PUBLIC",
         account_id="",
         endpoint="",
+        loop=None,
     ):
         self._id = _id
         self.account_id = account_id
         self.endpoint = endpoint + self.account_id
+        self.loop = loop or get_loop()
         # topic -> topic event queue
         self.queues: DefaultDict[str, asyncio.Queue] = defaultdict(asyncio.Queue)
 
@@ -61,8 +65,9 @@ class WsTopicManager:
                 logger.exception(e)
 
     def start(self, timeout: Optional[int | float] = None, **kwargs):
-        loop = asyncio.get_event_loop()
-        loop.call_soon_threadsafe(asyncio.create_task, self._connect(timeout, **kwargs))
+        self.loop.call_soon_threadsafe(
+            asyncio.create_task, self._connect(timeout, **kwargs)
+        )
 
     async def subscribe(self, topic):
         self.queues[topic] = asyncio.Queue()
@@ -138,11 +143,13 @@ class OrderlyPublicWsManager(WsTopicManager):
         _id="WS_PUBLIC",
         account_id="",
         endpoint="",
+        loop=None,
     ):
         super().__init__(
             _id=_id,
             account_id=account_id,
             endpoint=endpoint,
+            loop=loop,
         )
 
 
@@ -154,11 +161,13 @@ class OrderlyPrivateWsManager(WsTopicManager):
         orderly_key: Optional[str] = None,
         orderly_secret: Optional[str] = None,
         endpoint="",
+        loop=None,
     ):
         super().__init__(
             _id=_id,
             account_id=account_id,
             endpoint=endpoint,
+            loop=loop,
         )
         self.orderly_key = orderly_key
         self.orderly_secret = orderly_secret
@@ -192,4 +201,5 @@ class OrderlyPrivateWsManager(WsTopicManager):
     async def _reconnect(self):
         for topic in self.queues.keys():
             await self._login()
+            await self.do_subscribe(topic)
             await self.do_subscribe(topic)
