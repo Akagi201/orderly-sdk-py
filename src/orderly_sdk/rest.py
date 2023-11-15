@@ -144,11 +144,11 @@ class AsyncClient:
     async def _delete(self, ep, signed=False, v: str = "", params=None, json=None):
         return await self._request_api("delete", ep, signed, v, params, json)
 
-    async def get_maintenance_info(self) -> dict:
+    async def get_maintenance_info(self) -> Dict:
         return await self._get("public/system_info")
 
-    async def get_user_statistics(self) -> dict:
+    async def get_user_statistics(self) -> Dict:
         return await self._get("client/statistics", True)
 
-    async def create_order(self):
-        return await self._post("/order", True)
+    async def create_order(self, json: Dict) -> Dict:
+        return await self._post("/order", True, json=json)
