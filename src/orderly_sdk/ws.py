@@ -43,7 +43,7 @@ class WsTopicManager:
             try:
                 self.websocket = websocket
                 await self._reconnect()
-                logger.info(f"Connected to {self.endpoint}")
+                logger.debug(f"Connected to {self.endpoint}")
                 while True:
                     try:
                         message = await asyncio.wait_for(
@@ -82,7 +82,7 @@ class WsTopicManager:
 
     async def send_json(self, message):
         if "event" in message and message["event"] != "pong":
-            logger.info(f"sending message to {self.endpoint}: {message}")
+            logger.debug(f"sending message to {self.endpoint}: {message}")
         await self.websocket.send(jsonlib.dumps(message))
 
     async def _handle_heartbeat(self, message):

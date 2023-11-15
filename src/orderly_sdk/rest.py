@@ -84,7 +84,7 @@ class AsyncClient:
             path = urlparse(uri).path
             # logger.info(f"request path: {path.path}")
             signature_str = f"{ts}{method.upper()}{path}{json_str}"
-            logger.info(f"request signature: {signature_str}")
+            logger.debug(f"request signature: {signature_str}")
             data_bytes = bytes(signature_str, "utf-8")
 
             req_signature = base64.b64encode(
@@ -104,7 +104,7 @@ class AsyncClient:
             self.headers["Cache-Control"] = "no-cache"
             self.session.headers.update(self.headers)
 
-        logger.info("request uri: %s", uri)
+        logger.debug("request uri: %s", uri)
         async with getattr(self.session, method)(
             uri, params=params, json=json
         ) as response:
@@ -113,7 +113,7 @@ class AsyncClient:
 
     async def _handle_response(self, response: aiohttp.ClientResponse):
         if not str(response.status).startswith("2"):
-            logger.info("response: %s", response)
+            logger.error("response: %s", response)
             raise OrderlyAPIException(response, response.status)
         try:
             return await response.json()
@@ -145,7 +145,10 @@ class AsyncClient:
         return await self._request_api("delete", ep, signed, v, params, json)
 
     async def get_maintenance_info(self) -> dict:
-        return await self._get(ep="public/system_info", v="v1")
+        return await self._get("public/system_info")
 
     async def get_user_statistics(self) -> dict:
-        return await self._get(ep="client/statistics", signed=True, v="v1")
+        return await self._get("client/statistics", True)
+
+    async def create_order(self):
+        return await self._post("/order", True)
