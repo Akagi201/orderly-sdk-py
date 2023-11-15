@@ -1,10 +1,10 @@
 # orderly-sdk-py
 
-orderly.network Python SDk
+Orderly.network Python SDk
 
-## Note
+**Note: Only async Rest and Websocket APIs are maintained.**
 
-* only async rest and websocket apis are tested.
+## API docs
 
-* near api: <https://docs-api.orderly.network/#restful-api-private-claim-from-insurance-fund>
-* evm api: <https://docs-api-evm.orderly.network/#introduction>
+* NEAR API(v1): <https://docs-api.orderly.network/>
+* EVM API(v2): <https://docs-api-evm.orderly.network/>
