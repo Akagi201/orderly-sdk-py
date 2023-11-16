@@ -22,7 +22,7 @@ async def main():
     orderly_private_ws_client.start()
     while True:
         res = await orderly_private_ws_client.recv("position")
-        logger.info("balance: %s", res)
+        logger.info("position: %s", res)
 
 
 run(main(), debug=True)

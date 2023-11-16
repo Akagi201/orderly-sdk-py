@@ -202,4 +202,3 @@ class OrderlyPrivateWsManager(WsTopicManager):
         for topic in self.queues.keys():
             await self._login()
             await self.do_subscribe(topic)
-            await self.do_subscribe(topic)
