@@ -152,3 +152,9 @@ class AsyncClient:
 
     async def create_order(self, json: Dict) -> Dict:
         return await self._post("/order", True, json=json)
+
+    async def claim_liquidated_positions(self, json: Dict) -> Dict:
+        return await self._post("/liquidation", True, json=json)
+
+    async def claim_insurance_fund(self, json: Dict) -> Dict:
+        return await self._post("/claim_insurance_fund", True, json=json)
