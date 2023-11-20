@@ -2,7 +2,6 @@ import logging
 from asyncio import run
 
 from configs import *
-
 from orderly_sdk.ws import OrderlyPublicWsManager
 
 logging.basicConfig(
@@ -16,7 +15,7 @@ async def main():
         account_id=ACCOUNT_ID,
         endpoint=WS_PUBLIC_ENDPOINT,
     )
-    await orderly_ws_client.subscribe("bbos")
+    orderly_ws_client.subscribe("bbos")
     orderly_ws_client.start()
     while True:
         res = await orderly_ws_client.recv("bbos")

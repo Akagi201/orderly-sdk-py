@@ -69,7 +69,7 @@ class WsTopicManager:
             asyncio.create_task, self._connect(timeout, **kwargs)
         )
 
-    async def subscribe(self, topic):
+    def subscribe(self, topic):
         self.queues[topic] = asyncio.Queue()
 
     async def do_subscribe(self, topic):
