@@ -158,3 +158,6 @@ class AsyncClient:
 
     async def claim_insurance_fund(self, json: Dict) -> Dict:
         return await self._post("/claim_insurance_fund", True, json=json)
+
+    async def get_all_positions(self) -> Dict:
+        return await self._get("/positions", True)
