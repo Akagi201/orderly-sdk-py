@@ -151,22 +151,22 @@ class AsyncClient:
         return await self._get("client/statistics", True)
 
     async def create_order(self, json: Dict) -> Dict:
-        return await self._post("/order", True, json=json)
+        return await self._post("order", True, json=json)
 
     async def claim_liquidated_positions(self, json: Dict) -> Dict:
-        return await self._post("/liquidation", True, json=json)
+        return await self._post("liquidation", True, json=json)
 
     async def claim_insurance_fund(self, json: Dict) -> Dict:
-        return await self._post("/claim_insurance_fund", True, json=json)
+        return await self._post("claim_insurance_fund", True, json=json)
 
     async def get_all_positions(self) -> Dict:
-        return await self._get("/positions", True)
+        return await self._get("positions", True)
 
     async def get_liquidation(self, params) -> Dict:
-        return await self._get("/public/liquidation", params=params)
+        return await self._get("public/liquidation", params=params)
 
     async def get_liquidated_positions(self, params) -> Dict:
-        return await self._get("/public/liquidated_positions", params=params)
+        return await self._get("public/liquidated_positions", params=params)
 
     async def get_insurance_fund(self) -> Dict:
-        return await self._get("/public/insurancefund")
+        return await self._get("public/insurancefund")
