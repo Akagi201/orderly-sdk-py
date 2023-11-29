@@ -161,3 +161,12 @@ class AsyncClient:
 
     async def get_all_positions(self) -> Dict:
         return await self._get("/positions", True)
+
+    async def get_liquidation(self, params) -> Dict:
+        return await self._get("/public/liquidation", params=params)
+
+    async def get_liquidated_positions(self, params) -> Dict:
+        return await self._get("/public/liquidated_positions", params=params)
+
+    async def get_insurance_fund(self) -> Dict:
+        return await self._get("/public/insurancefund")
