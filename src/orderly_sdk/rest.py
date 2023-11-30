@@ -10,7 +10,7 @@ import aiohttp
 import base58
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from .exceptions import OrderlyAPIException, OrderlyRequestException
+from .exceptions import OrderlyRequestException
 from .helpers import get_loop
 
 logging.basicConfig(
@@ -114,7 +114,7 @@ class AsyncClient:
     async def _handle_response(self, response: aiohttp.ClientResponse):
         if not str(response.status).startswith("2"):
             logger.error("response: %s", response)
-            raise OrderlyAPIException(response, response.status)
+            # raise OrderlyAPIException(response, response.status)
         try:
             return await response.json()
         except ValueError as exc:
