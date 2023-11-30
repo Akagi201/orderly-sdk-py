@@ -170,3 +170,6 @@ class AsyncClient:
 
     async def get_insurance_fund(self) -> Dict:
         return await self._get("public/insurancefund")
+
+    async def get_available_symbols(self) -> Dict:
+        return await self._get("public/info")
