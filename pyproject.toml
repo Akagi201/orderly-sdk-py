@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "orderly-sdk"
-version = "0.1.6"
+version = "0.1.7"
 description = "Orderly Rest and Websocket SDK"
 authors = ["Akagi201 <akagi201@gmail.com>"]
 license = "Apache-2.0"

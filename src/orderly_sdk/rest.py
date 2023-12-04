@@ -176,3 +176,9 @@ class AsyncClient:
 
     async def get_futures_for_one_market(self, symbol) -> Dict:
         return await self._get("public/futures/" + symbol)
+
+    async def get_current_holding(self) -> Dict:
+        return await self._get("client/holding", True)
+
+    async def get_account_info(self) -> Dict:
+        return await self._get("client/info", True)
