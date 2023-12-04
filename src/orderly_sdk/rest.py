@@ -173,3 +173,6 @@ class AsyncClient:
 
     async def get_available_symbols(self) -> Dict:
         return await self._get("public/info")
+
+    async def get_futures_for_one_market(self, symbol) -> Dict:
+        return await self._get("public/futures/" + symbol)
