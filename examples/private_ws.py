@@ -1,13 +1,9 @@
-import logging
 from asyncio import run
 
 from configs import *
-from orderly_sdk.ws import OrderlyPrivateWsManager
 
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from orderly_sdk.log import logger
+from orderly_sdk.ws import OrderlyPrivateWsManager
 
 
 async def main():
@@ -21,7 +17,7 @@ async def main():
     orderly_private_ws_client.start()
     while True:
         res = await orderly_private_ws_client.recv("position")
-        logger.info("position: %s", res)
+        logger.info("position: {}", res)
 
 
 run(main(), debug=True)

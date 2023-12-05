@@ -2,7 +2,6 @@ import asyncio
 import base64
 import datetime
 import json as jsonlib
-import logging
 from collections import defaultdict
 from typing import DefaultDict, Dict, Optional
 
@@ -12,11 +11,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from websockets import WebSocketClientProtocol
 
 from .helpers import get_loop
-
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from .log import logger
 
 
 class WsTopicManager:
@@ -114,7 +109,7 @@ class WsTopicManager:
             try:
                 res = await asyncio.wait_for(self.queues[topic].get(), timeout=timeout)
             except asyncio.TimeoutError:
-                logging.info(f"no message in {timeout} seconds")
+                logger.info(f"no message in {timeout} seconds")
         return res
 
     async def _handle_message(self, message):

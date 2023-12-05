@@ -1,14 +1,8 @@
-import logging
 from asyncio import run
 
 from configs import *
-
+from orderly_sdk.log import logger
 from orderly_sdk.rest import AsyncClient
-
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
 
 
 async def main():

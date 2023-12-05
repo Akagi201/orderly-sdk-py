@@ -1,7 +1,6 @@
 import base64
 import datetime
 import json as jsonlib
-import logging
 from collections import defaultdict
 from typing import Dict, Optional
 from urllib.parse import urlparse
@@ -12,11 +11,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from .exceptions import OrderlyRequestException
 from .helpers import get_loop
-
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from .log import logger
 
 
 class AsyncClient:
@@ -104,7 +99,7 @@ class AsyncClient:
             self.headers["Cache-Control"] = "no-cache"
             self.session.headers.update(self.headers)
 
-        logger.debug("request uri: %s", uri)
+        logger.debug("request uri: {}", uri)
         async with getattr(self.session, method)(
             uri, params=params, json=json
         ) as response:
@@ -113,7 +108,7 @@ class AsyncClient:
 
     async def _handle_response(self, response: aiohttp.ClientResponse):
         if not str(response.status).startswith("2"):
-            logger.error("response: %s", response)
+            logger.error("response: {}", response)
             # raise OrderlyAPIException(response, response.status)
         try:
             return await response.json()
