@@ -109,7 +109,6 @@ class AsyncClient:
     async def _handle_response(self, response: aiohttp.ClientResponse):
         if not str(response.status).startswith("2"):
             logger.error("response: {}", response)
-            # raise OrderlyAPIException(response, response.status)
         try:
             return await response.json()
         except ValueError as exc:

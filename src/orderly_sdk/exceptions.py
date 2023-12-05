@@ -18,7 +18,7 @@ class OrderlyAPIException(Exception):
             self.message = resp_json
 
     def __str__(self):
-        return f"APIError(code={self.code}: {self.message}"
+        return f"APIError(status_code={self.status_code}, code={self.code}, message={self.message}"
 
 
 class OrderlyRequestException(Exception):
