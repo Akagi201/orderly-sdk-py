@@ -1,3 +1,6 @@
+"""
+Orderly Async Websocket API Client
+"""
 import asyncio
 import base64
 import datetime
@@ -15,6 +18,10 @@ from .log import logger
 
 
 class WsTopicManager:
+    """
+    Async Websocket API Base Client
+    """
+
     endpoint: str
     queues: DefaultDict[str, asyncio.Queue]
     websocket: WebSocketClientProtocol
@@ -60,27 +67,45 @@ class WsTopicManager:
                 logger.exception(e)
 
     def start(self, timeout: Optional[int | float] = None, **kwargs):
+        """
+        Start the websocket connection
+        """
         self.loop.call_soon_threadsafe(
             asyncio.create_task, self._connect(timeout, **kwargs)
         )
 
     def subscribe(self, topic):
+        """
+        Subscribe to a topic
+        """
         self.queues[topic] = asyncio.Queue()
 
     async def do_subscribe(self, topic):
+        """
+        Call subscribe to a topic
+        """
         await self.send_json({"id": self._id, "event": "subscribe", "topic": topic})
 
     async def request(self, symbol: str):
+        """
+        Request orderbook
+        """
         params = {"params": {"type": "orderbook", "symbol": symbol}}
         await self.send_json({"id": self._id, "event": "request", **params})
 
     async def unsubscribe(self, topic):
+        """
+        Unsubscribe from a topic
+        """
         await self.websocket.send(
             jsonlib.dumps({"id": self._id, "event": "unsubscribe", "topic": topic})
         )
         self.queues.pop(topic)
 
     async def send_json(self, message):
+        """
+        Send a json message
+        """
         if "event" in message and message["event"] != "pong":
             logger.debug(f"sending message to {self.endpoint}: {message}")
         await self.websocket.send(jsonlib.dumps(message))
@@ -104,6 +129,9 @@ class WsTopicManager:
         await self.queues[message["topic"]].put(data)
 
     async def recv(self, topic, timeout=10):
+        """
+        Receive a message from a topic
+        """
         res = None
         while not res:
             try:
@@ -133,6 +161,10 @@ class WsTopicManager:
 
 
 class OrderlyPublicWsManager(WsTopicManager):
+    """
+    Orderly Public Async Websocket API Client
+    """
+
     def __init__(
         self,
         _id="WS_PUBLIC",
@@ -149,6 +181,10 @@ class OrderlyPublicWsManager(WsTopicManager):
 
 
 class OrderlyPrivateWsManager(WsTopicManager):
+    """
+    Orderly Private Async Websocket API Client
+    """
+
     def __init__(
         self,
         _id="WS_PRIVATE",

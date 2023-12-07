@@ -1,3 +1,6 @@
+"""
+Orderly Async REST API Client
+"""
 import base64
 import datetime
 import json as jsonlib
@@ -15,6 +18,10 @@ from .log import logger
 
 
 class AsyncClient:
+    """
+    Async REST API Client
+    """
+
     _id: str
     account_id: Optional[str]
     orderly_key: Optional[str]
@@ -58,6 +65,9 @@ class AsyncClient:
         return aiohttp.ClientSession(loop=self.loop, headers=self._get_headers())
 
     async def close_connection(self):
+        """
+        Close the connection
+        """
         if self.session:
             assert self.session
             await self.session.close()
@@ -139,40 +149,92 @@ class AsyncClient:
         return await self._request_api("delete", ep, signed, v, params, json)
 
     async def get_maintenance_info(self) -> Dict:
+        """
+        Get maintenance info
+        https://docs-api-evm.orderly.network/#restful-api-public-system-maintenance-status
+        """
         return await self._get("public/system_info")
 
     async def get_user_statistics(self) -> Dict:
+        """
+        Get user statistics
+        https://docs-api-evm.orderly.network/#restful-api-private-get-user-volume-statistics
+        """
         return await self._get("client/statistics", True)
 
     async def create_order(self, json: Dict) -> Dict:
+        """
+        Create an order
+        https://docs-api-evm.orderly.network/#restful-api-private-create-order
+        """
         return await self._post("order", True, json=json)
 
     async def claim_liquidated_positions(self, json: Dict) -> Dict:
+        """
+        Claim liquidated positions
+        https://docs-api-evm.orderly.network/#restful-api-private-get-account-information
+        """
         return await self._post("liquidation", True, json=json)
 
     async def claim_insurance_fund(self, json: Dict) -> Dict:
+        """
+        Claim insurance fund
+        https://docs-api-evm.orderly.network/#restful-api-private-get-user-statistics
+        """
         return await self._post("claim_insurance_fund", True, json=json)
 
     async def get_all_positions(self) -> Dict:
+        """
+        Get all positions
+        https://docs-api-evm.orderly.network/#restful-api-private-get-funding-fee-history
+        """
         return await self._get("positions", True)
 
     async def get_liquidation(self, params) -> Dict:
+        """
+        Get liquidation
+        https://docs-api-evm.orderly.network/#restful-api-public-get-liquidated-positions-info
+        """
         return await self._get("public/liquidation", params=params)
 
     async def get_liquidated_positions(self, params) -> Dict:
+        """
+        Get liquidated positions
+        https://docs-api-evm.orderly.network/#restful-api-public-get-liquidated-positions-info
+        """
         return await self._get("public/liquidated_positions", params=params)
 
     async def get_insurance_fund(self) -> Dict:
+        """
+        Get insurance fund
+        https://docs-api-evm.orderly.network/#restful-api-public-get-insurance-fund-info
+        """
         return await self._get("public/insurancefund")
 
     async def get_available_symbols(self) -> Dict:
+        """
+        Get available symbols
+        https://docs-api-evm.orderly.network/#restful-api-public-available-symbols
+        """
         return await self._get("public/info")
 
     async def get_futures_for_one_market(self, symbol) -> Dict:
+        """
+        Get futures for one market
+        https://docs-api-evm.orderly.network/#restful-api-public-get-futures-info-for-all-markets
+        """
         return await self._get("public/futures/" + symbol)
 
     async def get_current_holding(self) -> Dict:
+        """
+        Get current holding
+        https://docs-api-evm.orderly.network/#restful-api-private-get-current-holding
+        """
         return await self._get("client/holding", True)
 
     async def get_account_info(self) -> Dict:
+        """
+        Get account info
+        https://docs-api-evm.orderly.network/#restful-api-private-get-account-information
+        """
         return await self._get("client/info", True)

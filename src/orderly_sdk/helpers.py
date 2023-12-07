@@ -6,7 +6,8 @@ import asyncio
 
 
 def get_loop():
-    """check if there is an event loop in the current thread, if not create one
+    """
+    check if there is an event loop in the current thread, if not create one
     inspired by https://stackoverflow.com/questions/46727787/runtimeerror-there-is-no-current-event-loop-in-thread-in-async-apscheduler
     """
     try:
