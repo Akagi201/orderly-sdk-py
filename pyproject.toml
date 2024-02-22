@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "orderly-sdk"
-version = "0.2.2"
+version = "0.2.3"
 description = "Orderly Rest and Websocket SDK"
 authors = ["Akagi201 <akagi201@gmail.com>"]
 license = "Apache-2.0"
@@ -9,21 +9,19 @@ packages = [{include = "orderly_sdk", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-eth-keys = "^0.4.0"
+eth-keys = "^0.5.0"
 base58 = "^2.1.1"
-cryptography = "^41.0.7"
-aiohttp = "^3.9.1"
+cryptography = "^42.0.4"
+aiohttp = "^3.9.3"
 requests = "^2.31.0"
-types-requests = "^2.31.0.10"
+types-requests = "^2.31.0.20240218"
 websockets = "^12.0"
 loguru = "^0.7.2"
 
-
 [tool.poetry.group.dev.dependencies]
-black = "^23.11.0"
-ruff = "^0.1.7"
-mypy = "^1.7.1"
-pdoc = "^14.1.0"
+ruff = "^0.2.2"
+mypy = "^1.8.0"
+pdoc = "^14.4.0"
 
 [build-system]
 requires = ["poetry-core"]
