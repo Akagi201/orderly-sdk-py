@@ -86,8 +86,15 @@ class AsyncClient:
             if json is not None:
                 logger.debug(f"request json body: {json}")
                 json_str = jsonlib.dumps(json)
-            path = urlparse(uri).path
-            # logger.info(f"request path: {path.path}")
+
+            if params:
+                query_string = "&".join(f"{k}={v}" for k, v in params.items())
+                url_parts = list(urlparse(uri))
+                url_parts[4] = query_string
+                path = url_parts[2] + "?" + url_parts[4]
+            else:
+                path = urlparse(uri).path
+                
             signature_str = f"{ts}{method.upper()}{path}{json_str}"
             logger.debug(f"request signature: {signature_str}")
             data_bytes = bytes(signature_str, "utf-8")
@@ -238,3 +245,13 @@ class AsyncClient:
         https://docs-api-evm.orderly.network/#restful-api-private-get-account-information
         """
         return await self._get("client/info", True)
+
+    async def batch_cancel_orders(self, order_ids: list) -> Dict:
+        """
+        Batch cancel orders
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/batch-cancel-orders
+        """
+        formatted_order_ids = ",".join(order_ids)
+        params = {"order_ids": formatted_order_ids}
+
+        return await self._delete("batch-order", True, params=params) 
