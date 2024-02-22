@@ -32,7 +32,7 @@ class AsyncClient:
 
     def __init__(
         self,
-        _id="websocket_client",
+        _id="rest_client",
         account_id: Optional[str] = None,
         orderly_key: Optional[str] = None,
         orderly_secret: Optional[str] = None,
