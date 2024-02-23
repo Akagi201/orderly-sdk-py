@@ -1,12 +1,13 @@
 """
 Orderly Async REST API Client
 """
+
 import base64
 import datetime
 import json as jsonlib
 from collections import defaultdict
 from typing import Dict, Optional
-from urllib.parse import urlparse
+from urllib.parse import urlencode, urlparse
 
 import aiohttp
 import base58
@@ -87,7 +88,9 @@ class AsyncClient:
                 logger.debug(f"request json body: {json}")
                 json_str = jsonlib.dumps(json)
             path = urlparse(uri).path
-            # logger.info(f"request path: {path.path}")
+            if params:
+                query = urlencode(params)
+                path = f"{path}?{query}"
             signature_str = f"{ts}{method.upper()}{path}{json_str}"
             logger.debug(f"request signature: {signature_str}")
             data_bytes = bytes(signature_str, "utf-8")
@@ -150,91 +153,101 @@ class AsyncClient:
 
     async def get_maintenance_info(self) -> Dict:
         """
-        Get maintenance info
-        https://docs-api-evm.orderly.network/#restful-api-public-system-maintenance-status
+        Get System Maintenance Status
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/public/get-system-maintenance-status
         """
         return await self._get("public/system_info")
 
     async def get_user_statistics(self) -> Dict:
         """
-        Get user statistics
-        https://docs-api-evm.orderly.network/#restful-api-private-get-user-volume-statistics
+        Get User Statistics
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/get-user-statistics
         """
         return await self._get("client/statistics", True)
 
     async def create_order(self, json: Dict) -> Dict:
         """
-        Create an order
-        https://docs-api-evm.orderly.network/#restful-api-private-create-order
+        Create Order
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/create-order
         """
         return await self._post("order", True, json=json)
 
     async def claim_liquidated_positions(self, json: Dict) -> Dict:
         """
-        Claim liquidated positions
-        https://docs-api-evm.orderly.network/#restful-api-private-get-account-information
+        Claim Liquidated Positions
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/claim-liquidated-positions
         """
         return await self._post("liquidation", True, json=json)
 
     async def claim_insurance_fund(self, json: Dict) -> Dict:
         """
-        Claim insurance fund
-        https://docs-api-evm.orderly.network/#restful-api-private-get-user-statistics
+        Claim Insurance Fund
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/claim-insurance-fund
         """
         return await self._post("claim_insurance_fund", True, json=json)
 
     async def get_all_positions(self) -> Dict:
         """
-        Get all positions
-        https://docs-api-evm.orderly.network/#restful-api-private-get-funding-fee-history
+        Get All Positions Info
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/get-all-positions-info
         """
         return await self._get("positions", True)
 
     async def get_liquidation(self, params) -> Dict:
         """
-        Get liquidation
-        https://docs-api-evm.orderly.network/#restful-api-public-get-liquidated-positions-info
+        Get Positions Under Liquidation
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/public/get-positions-under-liquidation
         """
         return await self._get("public/liquidation", params=params)
 
     async def get_liquidated_positions(self, params) -> Dict:
         """
-        Get liquidated positions
-        https://docs-api-evm.orderly.network/#restful-api-public-get-liquidated-positions-info
+        Get Liquidated Positions Info
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/public/get-liquidated-positions-info
         """
         return await self._get("public/liquidated_positions", params=params)
 
     async def get_insurance_fund(self) -> Dict:
         """
-        Get insurance fund
-        https://docs-api-evm.orderly.network/#restful-api-public-get-insurance-fund-info
+        Get Insurance Fund Info
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/public/get-insurance-fund-info
         """
         return await self._get("public/insurancefund")
 
     async def get_available_symbols(self) -> Dict:
         """
-        Get available symbols
-        https://docs-api-evm.orderly.network/#restful-api-public-available-symbols
+        Get Available Symbols
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/public/get-available-symbols
         """
         return await self._get("public/info")
 
     async def get_futures_for_one_market(self, symbol) -> Dict:
         """
-        Get futures for one market
-        https://docs-api-evm.orderly.network/#restful-api-public-get-futures-info-for-all-markets
+        Get Futures Info for One Market
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/public/get-futures-info-for-one-market
         """
         return await self._get("public/futures/" + symbol)
 
     async def get_current_holding(self) -> Dict:
         """
-        Get current holding
-        https://docs-api-evm.orderly.network/#restful-api-private-get-current-holding
+        Get Current Holding
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/get-current-holding
         """
         return await self._get("client/holding", True)
 
     async def get_account_info(self) -> Dict:
         """
-        Get account info
-        https://docs-api-evm.orderly.network/#restful-api-private-get-account-information
+        Get Account Information
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/get-account-information
         """
         return await self._get("client/info", True)
+
+    async def batch_cancel_orders(self, order_ids: list) -> Dict:
+        """
+        Batch Cancel Orders
+        https://orderly.network/docs/build-on-evm/evm-api/restful-api/private/batch-cancel-orders
+        """
+        formatted_order_ids = ",".join(order_ids)
+        params = {"order_ids": formatted_order_ids}
+
+        return await self._delete("batch-order", True, params=params)
