@@ -1,6 +1,7 @@
 """
 Logging module
 """
+
 import sys
 
 from loguru import logger

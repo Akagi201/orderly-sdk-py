@@ -1,6 +1,7 @@
 from asyncio import run
 
 from configs import *
+
 from orderly_sdk.log import logger
 from orderly_sdk.rest import AsyncClient
 
@@ -13,6 +14,10 @@ async def main():
 
     info = await orderly_client.get_maintenance_info()
     logger.info(info)
+
+    liquidation = await orderly_client.get_liquidation(params=None)
+    logger.info(liquidation)
+
     await orderly_client.close_connection()
 
 
