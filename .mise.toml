@@ -1,0 +1,11 @@
+[tools]
+python = "3.13.2"
+uv = "0.6.1"
+just = "1.39.0"
+direnv = "2.35.0"
+
+[alias]
+just = "ubi:casey/just"
+
+[settings]
+experimental = true
