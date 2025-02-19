@@ -1,0 +1,29 @@
+name: Python Lint
+
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+      - main
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  python_lint:
+    name: Python lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: Install deps
+        run: uv sync --all-extras
+      - name: Lint
+        run: uv run ruff check .
